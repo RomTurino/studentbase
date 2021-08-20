@@ -11,14 +11,14 @@
       <span class="third"></span>
     </label>
     <ul class="hidden-menu">
-      <form action = '{%url "reverse"%}' method = 'get' class = 'student-order '>
+      <form action = '{%url "students"%}' method = 'get' class = 'student-order '>
       <li>
           <button
                   type="submit"
                   class="btn btn-warning"
                   name = 'up'
                   value="up"
-                  href = '{%url "reverse"%}'
+                  href = '{%url "students"%}'
                   >
               Сортировка<br>по убыванию id
           </button>
@@ -31,7 +31,7 @@
                   class="btn btn-warning"
                   name = 'down'
                   value = 'down'
-                  href = '{%url "reverse"%}'>
+                  href = '{%url "students"%}'>
               Сортировка<br>по возрастанию id
           </button>
       </li>
