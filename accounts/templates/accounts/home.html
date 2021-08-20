@@ -1,0 +1,18 @@
+{%extends 'base.html'%}
+{%block title%}Насущные дела{%endblock title%}
+{%block content%}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+<div class="row justify-content-center mt-5">
+        <div class="col-md-7 text-center">
+
+            <h1>Добро пожаловать в школьную систему!</h1>
+            <p>Это база данных договоров оказания учебных услуг</p>
+        <a role="button" class="btn btn-primary btn-lg" href="{%if user.is_authenticated%}{% url 'loginuser' %}{%else%}{% url 'loginuser' %}{%endif%}">Начать</a>
+        </div>
+    </div>
+{%endblock content%}

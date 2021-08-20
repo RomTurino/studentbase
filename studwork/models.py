@@ -83,12 +83,11 @@ class Lesson(models.Model):
         ('s', 'Обычный'),
         ('k', 'Контрольный')
     )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     lesson_type = models.CharField(max_length=1, choices=KINDS, default='s',
                                    verbose_name='Обычный/контрольный')
-    lesson_themes = models.ManyToManyField('LessonTheme', related_query_name='themes',
+    lesson_themes = models.ManyToManyField('LessonTheme', related_query_name='lesson_themes',
                                            verbose_name='Темы')
-    test = models.ManyToManyField('Test', related_query_name='test',
+    test = models.ManyToManyField('Test', related_query_name='lesson_test',
                                   verbose_name='Тест')
     lesson_time = models.TimeField(verbose_name='Время урока')
     lesson_date = models.DateField(verbose_name="Дата урока")
@@ -101,7 +100,10 @@ class Lesson(models.Model):
         ordering = ['lesson_date', 'lesson_type']
 
     def __str__(self):
-        return f'{self.lesson_type}, {self.lesson_date} {self.lesson_time}'
+        if self.lesson_type == 's':
+            return f'Обычный, {self.lesson_date} {self.lesson_time}'
+        else:
+            return f'Контрольный, {self.lesson_date} {self.lesson_time}'
 
 
 class Test(models.Model):

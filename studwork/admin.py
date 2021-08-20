@@ -2,6 +2,8 @@ from django.contrib import admin
 from .models import *
 
 
+
+
 class ContractAdmin(admin.ModelAdmin):
     list_display = ('contract_number', 'course',
                     'teacher', 'parent', 'student',
@@ -29,6 +31,7 @@ class StudentAdmin(admin.ModelAdmin):
 
 
 class LessonAdmin(admin.ModelAdmin):
+
     list_display = ('lesson_date', 'lesson_type', 'lesson_time',
                     'is_done', 'right_answers')
     list_display_links = ('lesson_date', 'lesson_type')

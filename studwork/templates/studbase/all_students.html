@@ -1,0 +1,68 @@
+{%extends 'base.html'%}
+{%block title%}Ученики{%endblock title%}
+{%block content%}
+
+
+<div id = 'menu'>
+    <input type="checkbox" id="hmt" class="hidden-menu-ticker">
+    <label class="btn-menu" for="hmt">
+      <span class="first"></span>
+      <span class="second"></span>
+      <span class="third"></span>
+    </label>
+    <ul class="hidden-menu">
+      <form action = '{%url "reverse"%}' method = 'get' class = 'student-order '>
+      <li>
+          <button
+                  type="submit"
+                  class="btn btn-warning"
+                  name = 'up'
+                  value="up"
+                  href = '{%url "reverse"%}'
+                  >
+              Сортировка<br>по убыванию id
+          </button>
+
+      </li>
+
+      <li>
+          <button
+                  type="submit"
+                  class="btn btn-warning"
+                  name = 'down'
+                  value = 'down'
+                  href = '{%url "reverse"%}'>
+              Сортировка<br>по возрастанию id
+          </button>
+      </li>
+      </form>
+      <li>
+          <form method = 'get' class = 'age-filter'>
+              <input type = 'text' placeholder="min"  name = 'min' value = ''>
+              <input type = 'text' placeholder="max" name = 'max' value = ''>
+              <button type = 'submit' class="btn btn-warning" href = '{%url "students"%}'>
+                  Фильтровать
+              </button>
+          </form>
+      </li>
+    </ul>
+</div>
+
+
+
+<form action = '{%url "search"%}' method = 'get' class = 'student-search '>
+    <input class="form-control me-2"
+           type="search"
+           placeholder="Найти ученика"
+           aria-label="Search"
+           name="searching">
+    <button type="submit" class="btn btn-warning">Поиск</button>
+</form>
+
+
+<ul class="all-students">
+    {%for student in students%}
+    <li>{{student.name}} (Возраст: {{student.age}})</li>
+    {%endfor%}
+</ul>
+{%endblock content%}
