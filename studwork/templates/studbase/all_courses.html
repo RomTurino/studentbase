@@ -1,0 +1,42 @@
+{%extends 'base.html'%}
+{%block title%}Ученики{%endblock title%}
+
+{%block content%}
+
+
+<div id = 'menu'>
+    <input type="checkbox" id="hmt" class="hidden-menu-ticker">
+    <label class="btn-menu" for="hmt">
+      <span class="first"></span>
+      <span class="second"></span>
+      <span class="third"></span>
+    </label>
+    <ul class="hidden-menu">
+      {%for crs in courses%}
+      <li>
+          <button
+                  type="submit"
+                  class="btn btn-warning">
+              <a href = "{%url 'course' title=crs.title%}">{{crs.title}}
+              </a>
+
+          </button>
+
+      </li>
+      {%endfor%}
+    </ul>
+</div>
+
+{%if course.title%}
+    <h1 class = 'course-title'>{{course.title}}</h1>
+{%else%}
+    <h1 class = 'course-title'>Все курсы</h1>
+{%endif%}
+
+<ul class="all-students">
+    {%for student in students%}
+    <li>{{student.name}} (Возраст: {{student.age}})</li>
+    {%endfor%}
+</ul>
+
+{%endblock content%}

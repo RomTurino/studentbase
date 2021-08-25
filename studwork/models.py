@@ -24,6 +24,8 @@ class Contract(models.Model):
                                related_query_name='course',
                                verbose_name='Курс')
 
+    objects = models.Manager()
+
     class Meta:
         verbose_name_plural = 'Договора'
         verbose_name = 'Договор'
@@ -42,8 +44,10 @@ class Teacher(models.Model):
     specialization = models.CharField(max_length=150,
                                       verbose_name='Специализация')
 
+    objects = models.Manager()
+
     class Meta:
-        verbose_name_plural = 'Учители'
+        verbose_name_plural = 'Учителя'
         verbose_name = 'Учитель'
         ordering = ['surname']
 
@@ -55,6 +59,8 @@ class Parent(models.Model):
     name = models.CharField(max_length=150, verbose_name='Имя')
     administrator = models.OneToOneField(Teacher, on_delete=models.CASCADE,
                                          verbose_name='Администратор')
+
+    objects = models.Manager()
 
     class Meta:
         verbose_name_plural = 'Родители'
@@ -68,11 +74,12 @@ class Parent(models.Model):
 class Student(models.Model):
     name = models.CharField(max_length=150, verbose_name='Имя')
     age = models.IntegerField(verbose_name='Возраст')
+    objects = models.Manager()
 
     class Meta:
         verbose_name_plural = 'Ученики'
         verbose_name = 'Ученик'
-        ordering = ['name']
+        ordering = ['id']
 
     def __str__(self):
         return self.name
@@ -93,6 +100,7 @@ class Lesson(models.Model):
     lesson_date = models.DateField(verbose_name="Дата урока")
     is_done = models.BooleanField(verbose_name="Проведен")
     right_answers = models.IntegerField(verbose_name="Количество правильных ответов")
+    objects = models.Manager()
 
     class Meta:
         verbose_name_plural = 'Уроки'
@@ -111,6 +119,7 @@ class Test(models.Model):
     question_count = models.IntegerField(verbose_name='количество вопросов')
     content = models.TextField(verbose_name='Контент')
     grade = models.IntegerField(verbose_name='Оценка', blank=True, null=True)
+    objects = models.Manager()
 
     class Meta:
         verbose_name_plural = 'Тесты'
@@ -130,6 +139,8 @@ class CoursePlan(models.Model):
     themes = models.ManyToManyField('LessonTheme', related_query_name='themes',
                                     verbose_name='Темы')
 
+    objects = models.Manager()
+
     class Meta:
         verbose_name_plural = 'Планы курса'
         verbose_name = 'План курса'
@@ -143,6 +154,7 @@ class LessonTheme(models.Model):
     code = models.IntegerField(verbose_name='Код урока', primary_key=True)
     content = models.TextField(verbose_name='Содержание')
     grade = models.IntegerField(verbose_name='Оценка темы')
+    objects = models.Manager()
 
     class Meta:
         verbose_name_plural = 'Темы урока'

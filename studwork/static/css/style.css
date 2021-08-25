@@ -3,16 +3,23 @@
     list-style: none;
     counter-reset: li;
 }
-.all-students li {
+.all-students li  {
     position: relative;
     border-left: 4px solid #DDDDDD;
     padding:16px 20px 16px 28px;
-    margin:12px 0 12px 80px;
+    margin:12px 0 12px 120px;
     -webkit-transition-duration: 0.3s;
     transition-duration: 0.3s;
     border: 2px solid #C0C0C0;
     color: #506a6b;
     box-shadow: 0 5px 5px 0 rgba(0,0,0, .2);
+}
+.course-title{
+    position: relative;
+    border-left: 4px solid #DDDDDD;
+    border-color:#ffc107;
+    padding:16px 20px 16px 28px;
+    margin:10px 0 12px 120px;
 }
 .all-students li:before {
     line-height: 32px;
@@ -74,6 +81,17 @@
     margin-left:80px
 }
 
+.course{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    alight-items:center;
+    width:20%;
+    margin:10px -40px;
+    padding: 0 5px;
+
+
+}
 .hidden-menu {
   display: block;
   position: fixed;
@@ -144,7 +162,3 @@
   top: -10px;
 }
 
-.age-filter input{
-    width:80%;
-    display:inline-block
-}

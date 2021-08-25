@@ -3,59 +3,10 @@
 {%block content%}
 
 
-<div id = 'menu'>
-    <input type="checkbox" id="hmt" class="hidden-menu-ticker">
-    <label class="btn-menu" for="hmt">
-      <span class="first"></span>
-      <span class="second"></span>
-      <span class="third"></span>
-    </label>
-    <ul class="hidden-menu">
-      <form action = '{%url "students"%}' method = 'get' class = 'student-order '>
-      <li>
-          <button
-                  type="submit"
-                  class="btn btn-warning"
-                  name = 'up'
-                  value="up"
-                  href = '{%url "students"%}'
-                  >
-              Сортировка<br>по убыванию id
-          </button>
-
-      </li>
-
-      <li>
-          <button
-                  type="submit"
-                  class="btn btn-warning"
-                  name = 'down'
-                  value = 'down'
-                  href = '{%url "students"%}'>
-              Сортировка<br>по возрастанию id
-          </button>
-      </li>
-      </form>
-      <li>
-          <form method = 'get' class = 'age-filter'>
-              <input type = 'text' placeholder="min"  name = 'min' value = ''>
-              <input type = 'text' placeholder="max" name = 'max' value = ''>
-              <button type = 'submit' class="btn btn-warning" href = '{%url "students"%}'>
-                  Фильтровать
-              </button>
-          </form>
-      </li>
-    </ul>
-</div>
 
 
-
-<form action = '{%url "search"%}' method = 'get' class = 'student-search '>
-    <input class="form-control me-2"
-           type="search"
-           placeholder="Найти ученика"
-           aria-label="Search"
-           name="searching">
+<form method = 'get' class = 'student-search '>
+    {{myFilter.form}}
     <button type="submit" class="btn btn-warning">Поиск</button>
 </form>
 
