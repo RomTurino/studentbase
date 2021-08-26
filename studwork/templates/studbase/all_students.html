@@ -5,7 +5,7 @@
 
 
 
-<form method = 'get' class = 'student-search '>
+<form method = 'get' class = 'student-search'>
     {{myFilter.form}}
     <button type="submit" class="btn btn-warning">Поиск</button>
 </form>
@@ -13,7 +13,7 @@
 
 <ul class="all-students">
     {%for student in students%}
-    <li>{{student.name}} (Возраст: {{student.age}})</li>
+    <li><a href="{%url 'stud_detail' id=student.id%}">{{student.name}} (Возраст: {{student.age}})</a></li>
     {%endfor%}
 </ul>
 {%endblock content%}

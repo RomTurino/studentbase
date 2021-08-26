@@ -1,0 +1,45 @@
+{%extends 'base.html'%}
+{%block title%}Ученики{%endblock title%}
+{%block content%}
+
+<h1>{{student.name}}</h1>
+<details>
+    <summary>Родитель:</summary>
+    <p> <a href="{%url 'parent' id=parent.id%}">{{parent.name}}</a></p>
+</details>
+<details>
+    <summary>Договора: </summary>
+    <ul>
+        {%for contract in contracts%}
+        <li>{{contract.contract_number}}</li>
+        {%endfor%}
+    </ul>
+</details>
+
+<details>
+    <summary>Преподаватели: </summary>
+    <ul>
+        {%for contract in contracts%}
+        <li><a href="{%url 'teacher' id=contract.teacher.id%}">{{contract.teacher}}</a></li>
+        {%endfor%}
+    </ul>
+</details>
+
+<details>
+    <summary>Уроки: </summary>
+    <ul>
+        {%for lesson in lessons%}
+        <li>{{lesson.content}}</li>
+        {%endfor%}
+    </ul>
+</details>
+
+<details>
+    <summary>Тесты: </summary>
+    <ul>
+        {%for test in tests%}
+        <li>{{test.code}}. {{test.content}}</li>
+        {%endfor%}
+    </ul>
+</details>
+{%endblock content%}

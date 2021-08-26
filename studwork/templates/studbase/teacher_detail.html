@@ -1,0 +1,24 @@
+{%extends 'base.html'%}
+{%block title%}Ученики{%endblock title%}
+{%block content%}
+
+<h1>{{teacher.surname}} {{teacher.name}}</h1>
+
+<details>
+    <summary>Ученики</summary>
+    <ul>
+        {%for student in students%}
+            <li>{{student.name}} ({{student.age}})</li>
+        {%endfor%}
+    </ul>
+</details>
+
+<details>
+    <summary>{{heading}}</summary>
+    <ul>
+        {%for teacher in subordinates%}
+            <li><a href="{%url 'teacher' id=teacher.curator.id%}">{{teacher.curator.surname}} {{teacher.curator.name}}</a></li>
+        {%endfor%}
+    </ul>
+</details>
+{%endblock content%}
