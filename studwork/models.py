@@ -6,10 +6,10 @@ from django.db import models
 class Contract(models.Model):
     contract_number = models.IntegerField(verbose_name='Номер договора',
                                           primary_key=True)
-    teacher = models.OneToOneField('Teacher', on_delete=models.CASCADE,
+    teacher = models.ForeignKey('Teacher', on_delete=models.CASCADE,
                                    related_query_name='teacher',
                                    verbose_name='Преподаватель')
-    parent = models.OneToOneField('Parent', on_delete=models.CASCADE,
+    parent = models.ForeignKey('Parent', on_delete=models.CASCADE,
                                   related_query_name='parent',
                                   verbose_name='Родитель')
     student = models.ForeignKey('Student', on_delete=models.CASCADE,
@@ -57,7 +57,7 @@ class Teacher(models.Model):
 
 class Parent(models.Model):
     name = models.CharField(max_length=150, verbose_name='Имя')
-    administrator = models.OneToOneField(Teacher, on_delete=models.CASCADE,
+    administrator = models.ForeignKey(Teacher, on_delete=models.CASCADE,
                                          verbose_name='Администратор')
 
     objects = models.Manager()
@@ -101,7 +101,7 @@ class Lesson(models.Model):
     lesson_time = models.TimeField(verbose_name='Время урока',default='')
     lesson_date = models.DateField(verbose_name="Дата урока",default='')
     is_done = models.BooleanField(verbose_name="Проведен",default='')
-    right_answers = models.IntegerField(verbose_name="Количество правильных ответов",null = True)
+    right_answers = models.IntegerField(verbose_name="Количество правильных ответов", null=True, blank=True)
 
 
     class Meta:
@@ -135,7 +135,7 @@ class Test(models.Model):
 class CoursePlan(models.Model):
     title = models.CharField(max_length=150, verbose_name='Название курса',
                              primary_key=True)
-    course_grade = models.IntegerField(verbose_name='Оценка')
+    course_grade = models.IntegerField(verbose_name='Оценка', null=True, blank=True)
     test = models.ManyToManyField(Test, related_query_name='plan_to_test',
                                   verbose_name='Тест')
     themes = models.ManyToManyField('LessonTheme', related_query_name='themes',
@@ -155,7 +155,7 @@ class CoursePlan(models.Model):
 class LessonTheme(models.Model):
     code = models.IntegerField(verbose_name='Код урока', primary_key=True)
     content = models.TextField(verbose_name='Содержание')
-    grade = models.IntegerField(verbose_name='Оценка темы')
+    grade = models.IntegerField(verbose_name='Оценка темы', null=True, blank=True)
     objects = models.Manager()
 
     class Meta:

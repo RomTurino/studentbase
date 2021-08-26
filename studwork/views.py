@@ -1,6 +1,5 @@
-from django.core.cache import caches, cache
+from django.core.exceptions import FieldDoesNotExist
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.decorators.cache import cache_page
 
 from .forms import LessonForm
 from .models import *
@@ -32,27 +31,25 @@ def one_course(request, title):
                'students': students}
     return render(request, 'studbase/all_courses.html', content)
 
-@cache_page(60 * 5)
+
 def one_student(request, id):
-    print(caches)
     student = Student.objects.get(id=id)
     contracts = Contract.objects.filter(student=id)
     parent = Parent.objects.get(id__in=contracts)
+
     lessons = Lesson.objects.filter(pk__in=contracts)
     lesson_themes = LessonTheme.objects.filter(pk__in=lessons)
     tests = Test.objects.filter(lesson_test__in=lessons)
     lesson_field_names = "Тип урока, Дата проведения, Время урока, Тема, Проведен, Количество правильных ответов".split(
         ', ')
 
-    content = dict(student=student,
-                   parent=parent,
-                   contracts=contracts,
+    content = dict(student=student if student else "не указано",
+                   parent=parent if parent else "не указано",
+                   contracts=contracts if parent else "не указано",
                    lessons=lessons.order_by('is_done'),
                    lesson_themes=lesson_themes,
                    tests=tests,
                    lesson_field_names=lesson_field_names)
-    cache.set('content', content)
-    print(cache['content'])
     return render(request, 'studbase/student_detail.html', content)
 
 
