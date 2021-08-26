@@ -28,9 +28,40 @@
 <details>
     <summary>Уроки: </summary>
     <ul>
+        <h4>Проведенные</h4>
+    </ul>
+
+
+<table class="resp-tab">
+    <thead>
+        <tr>
+            {%for field in lesson_field_names%}
+            <th>{{field}}</th>
+            {%endfor%}
+            <th>Редактирование</th>
+        </tr>
+    </thead>
+    <tbody>
         {%for lesson in lessons%}
-        <li>{{lesson.content}}</li>
+            {%for field in lesson_themes%}
+
+        <tr>
+            <td><span>Тип урока</span>{{lesson.get_lesson_type_display}}</td>
+            <td><span>Дата проведения</span>{{lesson.lesson_date}}</td>
+            <td><span>Время урока</span>{{lesson.lesson_time}}</td>
+            <td><span>Тема</span>{{field}}</td>
+            <td><span>Проведен</span>{%if lesson.is_done%}да{%else%}нет{%endif%}</td>
+            <td><span>Количество правильных ответов</span>{{lesson.right_answers}}</td>
+            <td><a class='btn btn-warning' href="{%url 'lesson' id=student.id%}">Изменить</a></td>
+        </tr>
+
+            {%endfor%}
         {%endfor%}
+    </tbody>
+</table>
+    <ul>
+    <h4>Запланированные</h4>
+    <a class='btn btn-info' href="{%url 'createlesson' id=student.id%}">Запланировать урок</a>
     </ul>
 </details>
 

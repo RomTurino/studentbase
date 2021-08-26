@@ -1,0 +1,23 @@
+{%extends 'base.html'%}
+{%block title%}Ученики{%endblock title%}
+{%block content%}
+
+{%if lesson.content%}
+    <h1>{{lesson.content}}</h1>
+{%else%}
+    <h1>Запланировать урок</h1>
+{%endif%}
+<details>
+    <summary>Подробности урока</summary>
+    <form  method = 'POST' class = 'lesson-change'>
+
+        {%csrf_token%}
+        {{form.as_p}}
+        <button type="submit" class="btn btn-warning">
+              Изменить
+        </button>
+    </form>
+</details>
+
+
+{%endblock content%}
