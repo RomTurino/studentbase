@@ -1,0 +1,12 @@
+{%extends 'base.html'%}
+{%block title%}Ученики{%endblock title%}
+{%block content%}
+
+<h1>{{error}}</h1>
+
+<ul class="all-students">
+    {%for student in students%}
+    <li><a href="{%url 'stud_detail' id=student.id%}">{{student.name}} (Возраст: {{student.age}})</a></li>
+    {%endfor%}
+</ul>
+{%endblock content%}

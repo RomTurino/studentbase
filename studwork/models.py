@@ -90,17 +90,16 @@ class Lesson(models.Model):
         ('s', 'Обычный'),
         ('k', 'Контрольный')
     )
+
     lesson_type = models.CharField(max_length=1, choices=KINDS, default='s',
                                    verbose_name='Обычный/контрольный')
     lesson_themes = models.ManyToManyField('LessonTheme', related_query_name='lesson_themes',
-                                           verbose_name='Темы',
-                                           default='')
+                                           verbose_name='Темы')
     test = models.ManyToManyField('Test', related_query_name='lesson_test',
-                                  verbose_name='Тест',
-                                  default='')
-    lesson_time = models.TimeField(verbose_name='Время урока',default='')
-    lesson_date = models.DateField(verbose_name="Дата урока",default='')
-    is_done = models.BooleanField(verbose_name="Проведен",default='')
+                                  verbose_name='Тест')
+    lesson_time = models.TimeField(verbose_name='Время урока')
+    lesson_date = models.DateField(verbose_name="Дата урока")
+    is_done = models.BooleanField(verbose_name="Проведен")
     right_answers = models.IntegerField(verbose_name="Количество правильных ответов", null=True, blank=True)
 
 

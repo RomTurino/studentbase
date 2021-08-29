@@ -9,5 +9,6 @@ urlpatterns = [
     path('parent/<int:id>', views.one_parent, name='parent'),
     path('teacher/<int:id>', views.one_teacher, name='teacher'),
     path('lesson/<int:id>', views.one_lesson, name='lesson'),
-    path('lesson/create/<int:id>', views.create_lesson, name='createlesson')
+    path('lesson/create/<int:id>', views.create_lesson, name='createlesson'),
+    path('cache/', views.last_students, name='recent')
 ]

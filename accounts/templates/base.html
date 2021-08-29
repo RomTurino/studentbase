@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{%load cache%}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +14,7 @@
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script> <!-- JQUERY -->
 </head>
 <body>
+{%cache 600 navbar%}
     <nav class="navbar navbar-expand-md navbar-light bg-warning">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">
@@ -36,7 +38,7 @@
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
                         </button>
-                        <a class="navbar-brand" href="">
+                        <a class="navbar-brand" href="{%url 'recent'%}">
                             <span>Недавние</span>
                         </a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,16 +59,17 @@
                       </li>
           {%else%}
                <li class="nav-item">
-                    <a class="nav-link" href = '{%url "loginuser"%}'>Зарегистрироваться</a>
+                    <a class="nav-link" href = '{%url "signupuser"%}'>Зарегистрироваться</a>
                </li>
                <li class="nav-item">
-                    <a class="nav-link" href = '{%url "signupuser"%}'>Войти в систему</a>
+                    <a class="nav-link" href = '{%url "loginuser"%}'>Войти в систему</a>
                </li>
           {%endif%}
            </ul>
            </div>
         </div>
     </nav>
+{%endcache%}
 <div class = 'container'>
 {%block content%}{%endblock content%}
 </div>

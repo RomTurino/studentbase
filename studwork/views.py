@@ -1,9 +1,19 @@
-from django.core.exceptions import FieldDoesNotExist
+import memcached_stats
+from cachy.stores import memcached_store
+from django.core.cache import cache, caches
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.cache import cache_page
 
+from .filters import StudentFilter
 from .forms import LessonForm
 from .models import *
-from .filters import StudentFilter
+
+# from memcached_stats import MemcachedStats
+# mem = MemcachedStats('127.0.0.1', '11211')
+# mem = mem
+
+
+cache_set = set()
 
 
 def all_students(request):
@@ -32,33 +42,46 @@ def one_course(request, title):
     return render(request, 'studbase/all_courses.html', content)
 
 
+@cache_page(60 * 1, key_prefix='student_page')
 def one_student(request, id):
+    global cache_set
     student = Student.objects.get(id=id)
+    cache.set(student.id, f'{student.name}({student.age})', 60 * 1)
+    cache_set.add(student.id)
     contracts = Contract.objects.filter(student=id)
     parent = Parent.objects.get(id__in=contracts)
-
     lessons = Lesson.objects.filter(pk__in=contracts)
+    print(f'договор - {contracts}')
     lesson_themes = LessonTheme.objects.filter(pk__in=lessons)
     tests = Test.objects.filter(lesson_test__in=lessons)
     lesson_field_names = "Тип урока, Дата проведения, Время урока, Тема, Проведен, Количество правильных ответов".split(
         ', ')
 
-    content = dict(student=student if student else "не указано",
-                   parent=parent if parent else "не указано",
-                   contracts=contracts if parent else "не указано",
-                   lessons=lessons.order_by('is_done'),
+    content = dict(student=student,
+                   parent=parent,
+                   contracts=contracts,
+                   lessons=lessons,
                    lesson_themes=lesson_themes,
                    tests=tests,
                    lesson_field_names=lesson_field_names)
+    # print(cache.get('student'))
+    # print(cache.get('student_page'))
+    # key =make_template_fragment_key('student_page')
+    # print(cache.get(key))
+    # print(student in cache)
+    # responce = render(request, 'studbase/student_detail.html', content)
+    # a=patch_vary_headers(responce, ['Cookie'])
+    # print(cache.get('Cookie'))
+    # print(a,b)
+    # print('Это точно сработает')
     return render(request, 'studbase/student_detail.html', content)
 
 
 def one_parent(request, id):
+    global cache_list
     parent = Parent.objects.get(id=id)
-
     contracts = Contract.objects.filter(parent=id)
     children = Student.objects.filter(id__in=contracts)
-    print(contracts)
     content = dict(parent=parent,
                    children=children)
     return render(request, 'studbase/parent_detail.html', content)
@@ -117,17 +140,21 @@ def create_lesson(request, id):
         return render(request, 'studbase/change_detail.html', {'form': form})
     else:
         form = LessonForm(request.POST)
+        print(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data.get('pk'))
         lesson = Lesson.objects.filter(pk=id)
-        contract = Contract.objects.get(lessons__in=lesson)
+        contract = Contract.objects.get(student=id)
         try:
             print('try')
             form.save()
-            contract.lessons.set(form)
+            lesson = Lesson.objects.last()
+            print(lesson.id)
+            contract.lessons.add(lesson.id)
         except ValueError:
             pass
 
         return redirect('stud_detail', id=id)
-
 
         # contract = Contract.objects.get(lessons=id)
         # if form.is_valid():
@@ -149,3 +176,21 @@ def create_lesson(request, id):
         #     contract.lessons.add(lesson)
         #
         # return redirect('stud_detail', id=id)
+
+
+def last_students(request):
+    global cache_set
+    print(cache_set)
+    for key in cache_set:
+        if not cache.has_key(key):
+            try:
+                cache_set.discard(key)
+            except RuntimeError:
+                return render(request, 'studbase/recent_students.html',
+                              {'error': 'Похоже, что-то пошло не так, обновите страницу'})
+            finally:
+                return render(request, 'studbase/recent_students.html',
+                              {'error': 'Похоже, что-то пошло не так, обновите страницу'})
+    students = Student.objects.filter(id__in=cache_set)
+    content = dict(students=students)
+    return render(request, 'studbase/recent_students.html', content)

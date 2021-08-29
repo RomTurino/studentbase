@@ -3,6 +3,7 @@
 {%block content%}
 
 <h1>{{student.name}}</h1>
+
 <details>
     <summary>Родитель:</summary>
     <p> <a href="{%url 'parent' id=parent.id%}">{{parent.name}}</a></p>
@@ -44,7 +45,7 @@
     <tbody>
         {%for lesson in lessons%}
             {%for field in lesson_themes%}
-
+            {%if lesson.is_done%}
         <tr>
             <td><span>Тип урока</span>{{lesson.get_lesson_type_display}}</td>
             <td><span>Дата проведения</span>{{lesson.lesson_date}}</td>
@@ -54,7 +55,7 @@
             <td><span>Количество правильных ответов</span>{{lesson.right_answers}}</td>
             <td><a class='btn btn-warning' href="{%url 'lesson' id=student.id%}">Изменить</a></td>
         </tr>
-
+            {%endif%}
             {%endfor%}
         {%endfor%}
     </tbody>
@@ -63,6 +64,33 @@
     <h4>Запланированные</h4>
     <a class='btn btn-info' href="{%url 'createlesson' id=student.id%}">Запланировать урок</a>
     </ul>
+<table class="resp-tab">
+    <thead>
+        <tr>
+            {%for field in lesson_field_names%}
+            <th>{{field}}</th>
+            {%endfor%}
+            <th>Редактирование</th>
+        </tr>
+    </thead>
+    <tbody>
+        {%for lesson in lessons%}
+            {%for field in lesson_themes%}
+            {%if not lesson.is_done%}
+        <tr>
+            <td><span>Тип урока</span>{{lesson.get_lesson_type_display}}</td>
+            <td><span>Дата проведения</span>{{lesson.lesson_date}}</td>
+            <td><span>Время урока</span>{{lesson.lesson_time}}</td>
+            <td><span>Тема</span>{{field}}</td>
+            <td><span>Проведен</span>{%if lesson.is_done%}да{%else%}нет{%endif%}</td>
+            <td><span>Количество правильных ответов</span>{{lesson.right_answers}}</td>
+            <td><a class='btn btn-warning' href="{%url 'lesson' id=student.id%}">Изменить</a></td>
+        </tr>
+            {%endif%}
+            {%endfor%}
+        {%endfor%}
+    </tbody>
+</table>
 </details>
 
 <details>
