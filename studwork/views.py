@@ -35,7 +35,16 @@ def all_students(request):
 
 def all_courses(request):
     courses = CoursePlan.objects.all()
-    students = Student.objects.all()
+    students_all = Student.objects.all()
+    paginator = Paginator(students_all, 20)
+    page = request.GET.get('page', 1)
+    try:
+        students = paginator.page(page)
+    except PageNotAnInteger:
+        students = paginator.page(1)
+    except EmptyPage:
+        students = paginator.page(paginator.num_pages)
+
     content = {'courses': courses, 'students': students}
     return render(request, 'studbase/all_courses.html', content)
 
