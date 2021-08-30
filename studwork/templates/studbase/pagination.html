@@ -1,0 +1,30 @@
+
+{% load i18n %}
+<div class = 'pagination'>
+
+     {% if  students.has_previous %}
+            <button class="btn btn-warning">
+            <a class="Next" href="?page={{ students.previous_page_number }}{% if request.GET.q %}&q=
+                      {{request.GET.q }}{% endif %}">{% trans 'Предыдущая' %}
+            </a>
+            </button>
+       {% endif %}
+       {% for n in students.paginator.page_range %}
+            {% if n > students.number|add:-4 and n < students.number|add:4 %}
+                  <div class='{% if n == students.number %}active{% else %}no-active{% endif %}'>
+                      <button class="btn btn-warning">
+                        <a href='?page={{ n }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}'>{{ n }}</a>
+                      </button>
+                  </div>
+              {% endif %}
+        {% endfor %}
+
+        {% if students.has_next %}
+                <button class="btn btn-warning">
+                 <a class="Next" href="?page=
+                               {{ students.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
+                                     {% trans 'Следующая' %}</a>
+                </button>
+         {% endif %}
+
+</div>

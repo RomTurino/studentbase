@@ -3,7 +3,7 @@ from cachy.stores import memcached_store
 from django.core.cache import cache, caches
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.cache import cache_page
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .filters import StudentFilter
 from .forms import LessonForm
 from .models import *
@@ -17,10 +17,19 @@ cache_set = set()
 
 
 def all_students(request):
-    students = Student.objects.all()
-    myFilter = StudentFilter(request.GET, queryset=students)
-    students = myFilter.qs
-    content = {'students': students, 'myFilter': myFilter}
+    students_all = Student.objects.all()
+    myFilter = StudentFilter(request.GET, queryset=students_all)
+    students_all = myFilter.qs
+    paginator = Paginator(students_all, 20)
+    page = request.GET.get('page', 1)
+    try:
+        students = paginator.page(page)
+    except PageNotAnInteger:
+        students = paginator.page(1)
+    except EmptyPage:
+        students = paginator.page(paginator.num_pages)
+
+    content = {'students': students, 'myFilter': myFilter, 'page': page}
     return render(request, 'studbase/all_students.html', content)
 
 
