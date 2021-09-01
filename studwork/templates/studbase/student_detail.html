@@ -6,10 +6,10 @@
 
 <details>
     <summary>Родитель:</summary>
-    <p> <a href="{%url 'parent' id=parent.id%}">{{parent.name}}</a></p>
+    <p><a href="{%url 'parent' id=parent.id%}">{{parent.name}}</a></p>
 </details>
 <details>
-    <summary>Договора: </summary>
+    <summary>Договора:</summary>
     <ul>
         {%for contract in contracts%}
         <li>{{contract.contract_number}}</li>
@@ -18,7 +18,7 @@
 </details>
 
 <details>
-    <summary>Преподаватели: </summary>
+    <summary>Преподаватели:</summary>
     <ul>
         {%for contract in contracts%}
         <li><a href="{%url 'teacher' id=contract.teacher.id%}">{{contract.teacher}}</a></li>
@@ -27,56 +27,23 @@
 </details>
 
 <details>
-    <summary>Уроки: </summary>
-    <ul>
-        <h4>Проведенные</h4>
-    </ul>
-
-
-<table class="resp-tab">
-    <thead>
-        <tr>
-            {%for field in lesson_field_names%}
-            <th>{{field}}</th>
-            {%endfor%}
-            <th>Редактирование</th>
-        </tr>
-    </thead>
-    <tbody>
-        {%for lesson in lessons%}
-            {%for field in lesson_themes%}
-            {%if lesson.is_done%}
-        <tr>
-            <td><span>Тип урока</span>{{lesson.get_lesson_type_display}}</td>
-            <td><span>Дата проведения</span>{{lesson.lesson_date}}</td>
-            <td><span>Время урока</span>{{lesson.lesson_time}}</td>
-            <td><span>Тема</span>{{field}}</td>
-            <td><span>Проведен</span>{%if lesson.is_done%}да{%else%}нет{%endif%}</td>
-            <td><span>Количество правильных ответов</span>{{lesson.right_answers}}</td>
-            <td><a class='btn btn-warning' href="{%url 'lesson' id=student.id%}">Изменить</a></td>
-        </tr>
-            {%endif%}
-            {%endfor%}
-        {%endfor%}
-    </tbody>
-</table>
-    <ul>
-    <h4>Запланированные</h4>
+    <summary>Уроки:</summary>
+    <p>
     <a class='btn btn-info' href="{%url 'createlesson' id=student.id%}">Запланировать урок</a>
-    </ul>
-<table class="resp-tab">
-    <thead>
+    </p>
+
+    <table class="resp-tab">
+        <thead>
         <tr>
             {%for field in lesson_field_names%}
             <th>{{field}}</th>
             {%endfor%}
-            <th>Редактирование</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         {%for lesson in lessons%}
-            {%for field in lesson_themes%}
-            {%if not lesson.is_done%}
+        {%for field in lesson_themes%}
+
         <tr>
             <td><span>Тип урока</span>{{lesson.get_lesson_type_display}}</td>
             <td><span>Дата проведения</span>{{lesson.lesson_date}}</td>
@@ -86,19 +53,39 @@
             <td><span>Количество правильных ответов</span>{{lesson.right_answers}}</td>
             <td><a class='btn btn-warning' href="{%url 'lesson' id=student.id%}">Изменить</a></td>
         </tr>
-            {%endif%}
-            {%endfor%}
+
         {%endfor%}
-    </tbody>
-</table>
+        {%endfor%}
+        </tbody>
+    </table>
 </details>
 
 <details>
-    <summary>Тесты: </summary>
-    <ul>
+    <summary>Тесты:</summary>
+    <table class="resp-tab">
+        <thead>
+        <tr>
+            {%for field in test_field_names%}
+            <th>{{field}}</th>
+            {%endfor%}
+        </tr>
+        </thead>
+        <tbody>
         {%for test in tests%}
-        <li>{{test.code}}. {{test.content}}</li>
+
+        <tr>
+            <td><span>Код теста</span>{{test.code}}</td>
+            <td><span>Количество вопросов</span>{{test.question_count}}</td>
+            <td><span>Содержание</span>{{test.content}}</td>
+            <td><span>Оценка</span>{{test.grade}}</td>
+
+        </tr>
+
         {%endfor%}
-    </ul>
+        </tbody>
+    </table>
 </details>
+<br>
+<br>
+<br>
 {%endblock content%}

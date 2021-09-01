@@ -1,6 +1,5 @@
-import memcached_stats
-from cachy.stores import memcached_store
-from django.core.cache import cache, caches
+
+from django.core.cache import cache
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.cache import cache_page
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -8,9 +7,6 @@ from .filters import StudentFilter
 from .forms import LessonForm
 from .models import *
 
-# from memcached_stats import MemcachedStats
-# mem = MemcachedStats('127.0.0.1', '11211')
-# mem = mem
 
 
 cache_set = set()
@@ -68,30 +64,21 @@ def one_student(request, id):
     cache_set.add(student.id)
     contracts = Contract.objects.filter(student=id)
     parent = Parent.objects.get(id__in=contracts)
-    lessons = Lesson.objects.filter(pk__in=contracts)
-    print(f'договор - {contracts}')
+    lessons = Lesson.objects.filter(lesson__in=contracts)
     lesson_themes = LessonTheme.objects.filter(pk__in=lessons)
     tests = Test.objects.filter(lesson_test__in=lessons)
-    lesson_field_names = "Тип урока, Дата проведения, Время урока, Тема, Проведен, Количество правильных ответов".split(
-        ', ')
-
+    lesson_field_names = "Тип урока, Дата проведения, Время урока, Тема, Проведен, " \
+                         "Количество правильных ответов, Редактирование".split(', ')
+    test_field_names= "Код теста, Количество вопросов, Содержание, Оценка".split(', ')
     content = dict(student=student,
                    parent=parent,
                    contracts=contracts,
-                   lessons=lessons,
+                   lessons=lessons.order_by('is_done'),
                    lesson_themes=lesson_themes,
                    tests=tests,
-                   lesson_field_names=lesson_field_names)
-    # print(cache.get('student'))
-    # print(cache.get('student_page'))
-    # key =make_template_fragment_key('student_page')
-    # print(cache.get(key))
-    # print(student in cache)
-    # responce = render(request, 'studbase/student_detail.html', content)
-    # a=patch_vary_headers(responce, ['Cookie'])
-    # print(cache.get('Cookie'))
-    # print(a,b)
-    # print('Это точно сработает')
+                   lesson_field_names=lesson_field_names,
+                   test_field_names=test_field_names)
+
     return render(request, 'studbase/student_detail.html', content)
 
 
@@ -123,7 +110,6 @@ def one_teacher(request, id):
 
 def one_lesson(request, id):
     if request.method == 'GET':
-        print('сейчас гет')
         lesson = Lesson.objects.filter(id=id)
         lesson_theme = LessonTheme.objects.filter(pk__in=lesson).first()
         form = LessonForm(instance=lesson.first())
@@ -134,22 +120,15 @@ def one_lesson(request, id):
                        student=student)
         return render(request, 'studbase/change_detail.html', content)
     else:
-        print(request.method)
         lesson = get_object_or_404(Lesson, pk=id)
         form = LessonForm(request.POST, instance=lesson)
         try:
-            print('try')
             form.save()
         except ValueError:
-            print('valuev')
-            lesson = Lesson.objects.update(form)
+            pass
         finally:
             return redirect('stud_detail', id=id)
-        # lesson = Lesson.objects.get(id=id)
-        # form = LessonForm(request.POST, instance=lesson)
-        # if form.is_valid():
-        #     form.save()
-        # return redirect('stud_detail', id=id)
+
 
 
 def create_lesson(request, id):
@@ -158,16 +137,13 @@ def create_lesson(request, id):
         return render(request, 'studbase/change_detail.html', {'form': form})
     else:
         form = LessonForm(request.POST)
-        print(request.POST)
-        if form.is_valid():
-            print(form.cleaned_data.get('pk'))
-        lesson = Lesson.objects.filter(pk=id)
+        #lesson = Lesson.objects.filter(pk=id)
         contract = Contract.objects.get(student=id)
         try:
-            print('try')
-            form.save()
-            lesson = Lesson.objects.last()
-            print(lesson.id)
+            lesson = form.save()
+            contract.lessons.add(lesson)
+            #lesson = Lesson.objects.last()
+            #print(lesson.id)
             contract.lessons.add(lesson.id)
         except ValueError:
             pass
