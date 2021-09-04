@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.utils import timezone
 
 from django.contrib.auth import login, logout, authenticate
@@ -47,5 +48,6 @@ def loginuser(request):
                           {'form': UserCreationForm(), 'error': 'Не нашел такого пользователя или такого пароля'})
         else:
             login(request, user)
+            cache.clear()
             return redirect('home')
 

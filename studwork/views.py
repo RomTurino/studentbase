@@ -1,4 +1,4 @@
-
+from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.cache import cache_page
@@ -11,7 +11,7 @@ from .models import *
 
 cache_set = set()
 
-
+@login_required
 def all_students(request):
     students_all = Student.objects.all()
     myFilter = StudentFilter(request.GET, queryset=students_all)
@@ -28,7 +28,7 @@ def all_students(request):
     content = {'students': students, 'myFilter': myFilter, 'page': page}
     return render(request, 'studbase/all_students.html', content)
 
-
+@login_required
 def all_courses(request):
     courses = CoursePlan.objects.all()
     students_all = Student.objects.all()
@@ -44,7 +44,7 @@ def all_courses(request):
     content = {'courses': courses, 'students': students}
     return render(request, 'studbase/all_courses.html', content)
 
-
+@login_required
 def one_course(request, title):
     course = CoursePlan.objects.get(title=title)
     courses = CoursePlan.objects.all()
@@ -55,7 +55,7 @@ def one_course(request, title):
                'students': students}
     return render(request, 'studbase/all_courses.html', content)
 
-
+@login_required
 @cache_page(60 * 1, key_prefix='student_page')
 def one_student(request, id):
     global cache_set
@@ -81,7 +81,7 @@ def one_student(request, id):
 
     return render(request, 'studbase/student_detail.html', content)
 
-
+@login_required
 def one_parent(request, id):
     global cache_list
     parent = Parent.objects.get(id=id)
@@ -91,7 +91,7 @@ def one_parent(request, id):
                    children=children)
     return render(request, 'studbase/parent_detail.html', content)
 
-
+@login_required
 def one_teacher(request, id):
     teacher = Teacher.objects.get(id=id)
     contracts = Contract.objects.filter(teacher=id)
@@ -107,7 +107,7 @@ def one_teacher(request, id):
                    subordinates=subordinates)
     return render(request, 'studbase/teacher_detail.html', content)
 
-
+@login_required
 def one_lesson(request, id):
     if request.method == 'GET':
         lesson = Lesson.objects.filter(id=id)
@@ -124,13 +124,14 @@ def one_lesson(request, id):
         form = LessonForm(request.POST, instance=lesson)
         try:
             form.save()
+            cache.clear()
         except ValueError:
             pass
         finally:
             return redirect('stud_detail', id=id)
 
 
-
+@login_required
 def create_lesson(request, id):
     if request.method == 'GET':
         form = LessonForm()
@@ -147,7 +148,7 @@ def create_lesson(request, id):
             contract.lessons.add(lesson.id)
         except ValueError:
             pass
-
+        cache.clear()
         return redirect('stud_detail', id=id)
 
         # contract = Contract.objects.get(lessons=id)

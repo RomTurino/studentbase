@@ -94,9 +94,9 @@ class Lesson(models.Model):
     lesson_type = models.CharField(max_length=1, choices=KINDS, default='s',
                                    verbose_name='Обычный/контрольный')
     lesson_themes = models.ManyToManyField('LessonTheme', related_query_name='lesson_themes',
-                                           verbose_name='Темы')
+                                           verbose_name='Темы', blank = True)
     test = models.ManyToManyField('Test', related_query_name='lesson_test',
-                                  verbose_name='Тест')
+                                  verbose_name='Тест', blank = True)
     lesson_time = models.TimeField(verbose_name='Время урока')
     lesson_date = models.DateField(verbose_name="Дата урока")
     is_done = models.BooleanField(verbose_name="Проведен")
