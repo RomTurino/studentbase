@@ -6,7 +6,9 @@
 
 <details>
     <summary>Родитель:</summary>
-    <p><a href="{%url 'parent' id=parent.id%}">{{parent.name}}</a></p>
+    {%for p in parent%}
+        <p><a href="{%url 'parent' id=p.id%}">{{p.name}}</a></p>
+    {%endfor%}
 </details>
 <details>
     <summary>Договора:</summary>
@@ -42,19 +44,19 @@
         </thead>
         <tbody>
         {%for lesson in lessons%}
-        {%for field in lesson_themes%}
+            {%for field in lesson_themes%}
 
-        <tr>
-            <td><span>Тип урока</span>{{lesson.get_lesson_type_display}}</td>
-            <td><span>Дата проведения</span>{{lesson.lesson_date}}</td>
-            <td><span>Время урока</span>{{lesson.lesson_time}}</td>
-            <td><span>Тема</span>{{field}}</td>
-            <td><span>Проведен</span>{%if lesson.is_done%}да{%else%}нет{%endif%}</td>
-            <td><span>Количество правильных ответов</span>{{lesson.right_answers}}</td>
-            <td><a class='btn btn-warning' href="{%url 'lesson' id=student.id%}">Изменить</a></td>
-        </tr>
+            <tr>
+                <td><span>Тип урока</span>{{lesson.get_lesson_type_display}}</td>
+                <td><span>Дата проведения</span>{{lesson.lesson_date}}</td>
+                <td><span>Время урока</span>{{lesson.lesson_time}}</td>
+                <td><span>Тема</span>{{field}}</td>
+                <td><span>Проведен</span>{%if lesson.is_done%}да{%else%}нет{%endif%}</td>
+                <td><span>Количество правильных ответов</span>{{lesson.right_answers}}</td>
+                <td><span>Редактирование</span><a class='btn btn-warning' href="{%url 'lesson' id=student.id%}">Изменить</a></td>
+            </tr>
 
-        {%endfor%}
+            {%endfor%}
         {%endfor%}
         </tbody>
     </table>

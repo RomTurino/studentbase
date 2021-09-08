@@ -63,9 +63,11 @@ def one_student(request, id):
     cache.set(student.id, f'{student.name}({student.age})', 60 * 1)
     cache_set.add(student.id)
     contracts = Contract.objects.filter(student=id)
-    parent = Parent.objects.get(id__in=contracts)
+    parent = Parent.objects.filter(parent__in=contracts)
+    print(f'parent = {parent}')
     lessons = Lesson.objects.filter(lesson__in=contracts)
-    lesson_themes = LessonTheme.objects.filter(pk__in=lessons)
+    print(f' lessons = {lessons}')
+    lesson_themes = LessonTheme.objects.filter(lesson_themes__in=lessons)
     tests = Test.objects.filter(lesson_test__in=lessons)
     lesson_field_names = "Тип урока, Дата проведения, Время урока, Тема, Проведен, " \
                          "Количество правильных ответов, Редактирование".split(', ')
@@ -83,7 +85,6 @@ def one_student(request, id):
 
 @login_required
 def one_parent(request, id):
-    global cache_list
     parent = Parent.objects.get(id=id)
     contracts = Contract.objects.filter(parent=id)
     children = Student.objects.filter(id__in=contracts)
