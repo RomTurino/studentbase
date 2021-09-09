@@ -64,9 +64,11 @@ def one_student(request, id):
     cache_set.add(student.id)
     contracts = Contract.objects.filter(student=id)
     parent = Parent.objects.filter(parent__in=contracts)
-    print(f'parent = {parent}')
     lessons = Lesson.objects.filter(lesson__in=contracts)
-    print(f' lessons = {lessons}')
+    for lesson in lessons:
+        print(lesson.right_answers)
+        print(lesson.__dict__)
+        print(lesson)
     lesson_themes = LessonTheme.objects.filter(lesson_themes__in=lessons)
     tests = Test.objects.filter(lesson_test__in=lessons)
     lesson_field_names = "Тип урока, Дата проведения, Время урока, Тема, Проведен, " \

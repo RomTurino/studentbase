@@ -100,7 +100,7 @@ class Lesson(models.Model):
     lesson_time = models.TimeField(verbose_name='Время урока')
     lesson_date = models.DateField(verbose_name="Дата урока")
     is_done = models.BooleanField(verbose_name="Проведен")
-    right_answers = models.IntegerField(verbose_name="Количество правильных ответов", null=True, blank=True)
+    right_answers = models.IntegerField(verbose_name="Количество правильных ответов",  blank=True)
     objects = models.Manager()
 
     class Meta:

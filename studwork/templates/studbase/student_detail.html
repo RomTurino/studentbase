@@ -43,19 +43,21 @@
         </tr>
         </thead>
         <tbody>
-        {%for lesson in lessons%}
-            {%for field in lesson_themes%}
-
+         {%for field in lesson_themes%}
+            {%for lesson in lessons%}
+                {%if forloop.parentloop.first%}
             <tr>
+
                 <td><span>Тип урока</span>{{lesson.get_lesson_type_display}}</td>
                 <td><span>Дата проведения</span>{{lesson.lesson_date}}</td>
                 <td><span>Время урока</span>{{lesson.lesson_time}}</td>
                 <td><span>Тема</span>{{field}}</td>
                 <td><span>Проведен</span>{%if lesson.is_done%}да{%else%}нет{%endif%}</td>
-                <td><span>Количество правильных ответов</span>{{lesson.right_answers}}</td>
+                <td><span>Количество правильных ответов</span>{%if lesson.right_answers%}{{lesson.right_answers}}{%else%}Не указано{%endif%}</td>
                 <td><span>Редактирование</span><a class='btn btn-warning' href="{%url 'lesson' id=student.id%}">Изменить</a></td>
-            </tr>
 
+            </tr>
+                {%endif%}
             {%endfor%}
         {%endfor%}
         </tbody>
