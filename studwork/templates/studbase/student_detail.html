@@ -54,7 +54,7 @@
                 <td><span>Тема</span>{{field}}</td>
                 <td><span>Проведен</span>{%if lesson.is_done%}да{%else%}нет{%endif%}</td>
                 <td><span>Количество правильных ответов</span>{%if lesson.right_answers%}{{lesson.right_answers}}{%else%}Не указано{%endif%}</td>
-                <td><span>Редактирование</span><a class='btn btn-warning' href="{%url 'lesson' id=student.id%}">Изменить</a></td>
+                <td><span>Редактирование</span><a class='btn btn-warning' href="{%url 'lesson' id=lesson.id%}">Изменить</a></td>
 
             </tr>
                 {%endif%}

@@ -114,24 +114,28 @@ def one_teacher(request, id):
 def one_lesson(request, id):
     if request.method == 'GET':
         lesson = Lesson.objects.filter(id=id)
-        lesson_theme = LessonTheme.objects.filter(pk__in=lesson).first()
+        lesson_theme = LessonTheme.objects.filter(lesson_themes__in=lesson).first()
         form = LessonForm(instance=lesson.first())
-        contracts = Contract.objects.filter(lessons=id)
-        student = Student.objects.filter(id__in=contracts).first()
+        contracts = Contract.objects.filter(lessons__in=lesson)
+        student = Student.objects.filter(student__in=contracts).first()
         content = dict(form=form,
                        lesson=lesson_theme,
                        student=student)
         return render(request, 'studbase/change_detail.html', content)
     else:
-        lesson = get_object_or_404(Lesson, pk=id)
-        form = LessonForm(request.POST, instance=lesson)
+        #lesson = get_object_or_404(Lesson, pk=id)
+        lesson = Lesson.objects.filter(id=id)
+        contracts = Contract.objects.filter(lessons__in=lesson)
+        student = Student.objects.filter(student__in=contracts).first()
+        form = LessonForm(request.POST, instance=lesson.first())
+        print(form)
         try:
             form.save()
             cache.clear()
         except ValueError:
             pass
         finally:
-            return redirect('stud_detail', id=id)
+            return redirect('stud_detail', id=student.id)
 
 
 @login_required

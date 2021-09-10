@@ -110,9 +110,9 @@ class Lesson(models.Model):
 
     def __str__(self):
         if self.lesson_type == 's':
-            return f'Обычный, {self.lesson_date} {self.lesson_time}'
+            return f'Обычный, {self.lesson_date} {self.lesson_time}, ответов - {self.right_answers}'
         else:
-            return f'Контрольный, {self.lesson_date} {self.lesson_time}'
+            return f'Контрольный, {self.lesson_date} {self.lesson_time}, ответов - {self.right_answers}'
 
 
 class Test(models.Model):
