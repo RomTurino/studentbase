@@ -65,10 +65,6 @@ def one_student(request, id):
     contracts = Contract.objects.filter(student=id)
     parent = Parent.objects.filter(parent__in=contracts)
     lessons = Lesson.objects.filter(lesson__in=contracts)
-    for lesson in lessons:
-        print(lesson.right_answers)
-        print(lesson.__dict__)
-        print(lesson)
     lesson_themes = LessonTheme.objects.filter(lesson_themes__in=lessons)
     tests = Test.objects.filter(lesson_test__in=lessons)
     lesson_field_names = "Тип урока, Дата проведения, Время урока, Тема, Проведен, " \
@@ -89,7 +85,7 @@ def one_student(request, id):
 def one_parent(request, id):
     parent = Parent.objects.get(id=id)
     contracts = Contract.objects.filter(parent=id)
-    children = Student.objects.filter(id__in=contracts)
+    children = Student.objects.filter(student__in=contracts)
     content = dict(parent=parent,
                    children=children)
     return render(request, 'studbase/parent_detail.html', content)
@@ -98,7 +94,7 @@ def one_parent(request, id):
 def one_teacher(request, id):
     teacher = Teacher.objects.get(id=id)
     contracts = Contract.objects.filter(teacher=id)
-    students = Student.objects.filter(id__in=contracts)
+    students = Student.objects.filter(student__in=contracts)
     subordinates = Teacher.objects.filter(id=id)
     if teacher.curator == teacher:
         heading = 'Подчиненные'
@@ -158,26 +154,7 @@ def create_lesson(request, id):
         cache.clear()
         return redirect('stud_detail', id=id)
 
-        # contract = Contract.objects.get(lessons=id)
-        # if form.is_valid():
-        #     data = form.cleaned_data
-        #     lesson_type = data.get('lesson_type')
-        #     lesson_theme = data.get('lesson_theme')
-        #     test = data.get('test')
-        #     lesson_time = data.get('lesson_time')
-        #     lesson_date = data.get('lesson_date')
-        #     is_done = data.get('is_done')
-        #     right_answers = data.get('right_answers')
-        #     lesson = Lesson.objects.create(lesson_type=lesson_type,
-        #                                    lesson_theme=lesson_theme,
-        #                                    test=test,
-        #                                    lesson_time=lesson_time,
-        #                                    lesson_date=lesson_date,
-        #                                    is_done=is_done,
-        #                                    right_answers=right_answers)
-        #     contract.lessons.add(lesson)
-        #
-        # return redirect('stud_detail', id=id)
+
 
 
 def last_students(request):
