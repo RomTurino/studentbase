@@ -62,10 +62,12 @@ def one_student(request, id):
     student = Student.objects.get(id=id)
     cache.set(student.id, f'{student.name}({student.age})', 60 * 1)
     cache_set.add(student.id)
-    contracts = Contract.objects.filter(student=id)
+    contracts = Contract.objects.filter(student__exact=id)
     parent = Parent.objects.filter(parent__in=contracts)
     lessons = Lesson.objects.filter(lesson__in=contracts)
     lesson_themes = LessonTheme.objects.filter(lesson_themes__in=lessons)
+    print(f'Темы уроков - {lesson_themes}')
+    print(f'сами уроки - {lessons}')
     tests = Test.objects.filter(lesson_test__in=lessons)
     lesson_field_names = "Тип урока, Дата проведения, Время урока, Тема, Проведен, " \
                          "Количество правильных ответов, Редактирование".split(', ')
@@ -124,7 +126,6 @@ def one_lesson(request, id):
         contracts = Contract.objects.filter(lessons__in=lesson)
         student = Student.objects.filter(student__in=contracts).first()
         form = LessonForm(request.POST, instance=lesson.first())
-        print(form)
         try:
             form.save()
             cache.clear()

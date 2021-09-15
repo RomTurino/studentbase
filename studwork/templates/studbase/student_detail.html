@@ -43,9 +43,9 @@
         </tr>
         </thead>
         <tbody>
-         {%for field in lesson_themes%}
+        {%for field in lesson_themes%}
             {%for lesson in lessons%}
-                {%if forloop.parentloop.first%}
+                {%if forloop.parentloop.counter == forloop.counter%}
             <tr>
 
                 <td><span>Тип урока</span>{{lesson.get_lesson_type_display}}</td>
