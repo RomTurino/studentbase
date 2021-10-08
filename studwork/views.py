@@ -15,14 +15,16 @@ cache_set = set()
 def all_students(request):
     students_all = Student.objects.all()
     myFilter = StudentFilter(request.GET, queryset=students_all)
-    students_all = myFilter.qs
-    paginator = Paginator(students_all, 20)
-    page = request.GET.get('page', 1)
+    paginator = Paginator(myFilter.qs, 2)
+    page = request.GET.get('page')
     try:
         students = paginator.page(page)
+        print('переменная ', page)
     except PageNotAnInteger:
         students = paginator.page(1)
+        print('page number 1')
     except EmptyPage:
+        print(f'empty page - {paginator.num_pages}')
         students = paginator.page(paginator.num_pages)
 
     content = {'students': students, 'myFilter': myFilter, 'page': page}

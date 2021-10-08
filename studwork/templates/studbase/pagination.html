@@ -1,5 +1,7 @@
 
 {% load i18n %}
+
+{% with request.get_full_path as querystring %}
 <div class = 'pagination'>
 
      {% if  students.has_previous %}
@@ -8,15 +10,16 @@
                       {{request.GET.q }}{% endif %}">{% trans 'Предыдущая' %}
             </a>
             </button>
-       {% endif %}
+     {% endif %}
        {% for n in students.paginator.page_range %}
-            {% if n > students.number|add:-4 and n < students.number|add:4 %}
-                  <div class='{% if n == students.number %}active{% else %}no-active{% endif %}'>
-                      <button class="btn btn-warning">
-                        <a href='?page={{ n }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}'>{{ n }}</a>
-                      </button>
-                  </div>
-              {% endif %}
+                {% if n > students.number|add:-4 and n < students.number|add:4 %}
+                      {% if n == students.number %}<div class='active'>{% else %}<div class='no-active'>{% endif %}
+                          <button class="btn btn-warning">
+                            <a href='?page={{ n }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}'>{{ n }}</a>
+                          </button>
+                      </div>
+                {% endif %}
+
         {% endfor %}
 
         {% if students.has_next %}
@@ -26,5 +29,5 @@
                                      {% trans 'Следующая' %}</a>
                 </button>
          {% endif %}
-
+{% endwith %}
 </div>

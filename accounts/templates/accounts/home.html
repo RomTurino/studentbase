@@ -12,7 +12,7 @@
 
             <h1>Добро пожаловать в школьную систему!</h1>
             <p>Это база данных договоров оказания учебных услуг</p>
-        <a role="button" class="btn btn-primary btn-lg" href="{%if user.is_authenticated%}{% url 'loginuser' %}{%else%}{% url 'loginuser' %}{%endif%}">Начать</a>
+        <a role="button" class="btn btn-primary btn-lg" href="{%if user.is_authenticated%}{% url 'students' %}{%else%}{% url 'loginuser' %}{%endif%}">Начать</a>
         </div>
     </div>
 {%endblock content%}

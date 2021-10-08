@@ -17,7 +17,10 @@ def signupuser(request):
     if request.method == 'GET':
         return render(request, 'accounts/sign_up_user.html', {'form': UserCreationForm()})
     else:
-        if request.POST['password1'] == request.POST['password2']:
+        if request.POST['password1'] is '':
+            return render(request, 'accounts/sign_up_user.html', {'form': UserCreationForm(),
+                                                                  'error': 'Вы не ввели пароль'})
+        elif request.POST['password1'] == request.POST['password2']:
             try:
                 user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
                 user.save()

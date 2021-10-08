@@ -14,3 +14,4 @@ class StudentFilter(django_filters.FilterSet):
     class Meta:
         model = Student
         exclude = ['name', 'age']
+

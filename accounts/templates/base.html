@@ -14,7 +14,6 @@
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script> <!-- JQUERY -->
 </head>
 <body>
-{%cache 600 navbar%}
     <nav class="navbar navbar-expand-md navbar-light bg-warning">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">
@@ -69,7 +68,6 @@
            </div>
         </div>
     </nav>
-{%endcache%}
 <div class = 'container'>
 {%block content%}{%endblock content%}
 </div>
